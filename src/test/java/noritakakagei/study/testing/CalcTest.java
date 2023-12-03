@@ -17,11 +17,13 @@ class CalcTest {
 
     @Test
     void testAdd() {
+        int actual = calc.add(1, 2);
+
         // simple assertion used by only JUnit5 package
-        assertEquals(3, calc.add(1, 2));
+        assertEquals(3, actual);
 
         // more readable assertion used by AssertJ package supported JUnit5
-        assertThat(calc.add(1, 2)).isEqualTo(3);
+        assertThat(actual).isEqualTo(3);
     }
 
     @Test
