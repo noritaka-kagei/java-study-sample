@@ -10,14 +10,16 @@ import java.util.concurrent.Future;
 public class NotificationSample {
     public static void main(String[] args) throws InterruptedException, ExecutionException{
         Queue<String> queue = new LinkedList<>();   // this object used also as lock object
-        ExecutorService executor = Executors.newFixedThreadPool(4);
+        ExecutorService executor = Executors.newFixedThreadPool(3);
 
         Future<?> producer = executor.submit(new Producer(queue));
-        Future<?> customer = executor.submit(new Customer(queue));
+        Future<?> customer1 = executor.submit(new Customer("001", queue));
+        Future<?> customer2 = executor.submit(new Customer("002", queue));
 
         // waiting for sub thread terminated
         producer.get();
-        customer.get();
+        customer1.get();
+        customer2.get();
 
         executor.shutdown();
     }

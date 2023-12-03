@@ -20,6 +20,9 @@ public class Producer implements Runnable {
                 queue.add(message);
                 queue.notifyAll();
             }
+
+            // teminate worker thread
+            if (message.equals("quit")) break;
         }
     }
 }
