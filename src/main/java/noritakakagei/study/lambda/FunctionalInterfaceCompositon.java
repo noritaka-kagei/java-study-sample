@@ -30,12 +30,13 @@ class Main {
 
         /* Predicate<T> */
         Predicate<Integer> isPositive = n -> n > 0;
-        Predicate<Integer> isEven = n -> n % 2 == 0;
         Predicate<Integer> isNegative = isPositive.negate();
 
         System.out.println("-1 is negative: " + isNegative.test(-1));
 
+        Predicate<Integer> isEven = n -> n % 2 == 0;
         Predicate<Integer> isPositiveEven = isPositive.and(isEven);
+
         System.out.println("10 is positive and even: " + isPositiveEven.test(10));
     }
 }
