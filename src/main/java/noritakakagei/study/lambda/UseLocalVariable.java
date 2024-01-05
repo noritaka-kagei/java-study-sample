@@ -9,7 +9,7 @@ class UseLocalVariable {
     }
 
     public static void main(String... args) {
-        Main main = new Main();
+        UseLocalVariable main = new UseLocalVariable();
 
         // create lambda function
         Consumer<String> process = main.createProcess("parameter");
