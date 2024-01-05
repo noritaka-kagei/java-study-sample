@@ -5,6 +5,7 @@
 ## How to generate coverage report
 
 Use JaCoCo(Java Code Coverage) library as test coverage tool.
+JaCoCo: <https://www.jacoco.org/jacoco/trunk/doc/maven.html>
 
 Execute the following command to generate coverage reports.
 
