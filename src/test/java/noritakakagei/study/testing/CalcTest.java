@@ -8,10 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CalcTest {
-    private final Calc calc = new Calc();
+    private static Calc calc;
 
     @BeforeAll
-    void init() {
+    static void init() {
+        calc = new Calc();
     }
 
     @Test
