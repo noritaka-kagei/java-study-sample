@@ -2,7 +2,7 @@ package noritakakagei.study.lambda;
 
 import java.util.function.Consumer;
 
-class Main {
+class UseLocalVariable {
     Consumer<String> createProcess(String param) {
         String local = "local";
         return str -> System.out.println(str + ": " + param + " in " + local);
