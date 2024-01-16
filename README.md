@@ -1,6 +1,6 @@
 # Java Sample Application for Self-Learning
 
-![Java Sample Application for Self-Learning](./images/log.png)
+![Logo | Java Sample Application for Self-Learning](https://github.com/noritaka-kagei/java-study-sample/blob/main/images/logo.png)
 
 ## Abstract
 
