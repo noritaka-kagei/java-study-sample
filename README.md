@@ -1,5 +1,7 @@
 # Java Sample Application for Self-Learning
 
+![Java Sample Application for Self-Learning](./images/logl.png)
+
 ## Abstract
 
 ## How to generate coverage report
