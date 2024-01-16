@@ -1,4 +1,4 @@
-<p>
+<p align="center">
     <img src="https://github.com/noritaka-kagei/java-study-sample/blob/main/images/logo.png" alt="logo" width="150" height="150">
 </p>
 
