@@ -1,6 +1,6 @@
 # Java Sample Application for Self-Learning
 
-![Java Sample Application for Self-Learning](./images/logl.png)
+![Java Sample Application for Self-Learning](./images/log.png)
 
 ## Abstract
 
