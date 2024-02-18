@@ -12,13 +12,13 @@ JaCoCo: <https://www.jacoco.org/jacoco/trunk/doc/maven.html>
 Execute the following command to generate coverage reports.
 
 ```bash
-mvn clean verify
+$ mvn clean verify
 ```
 
 Coverage reports are generated in `target/site/jacoco` directory.
 
 ```bash
-ll target/site/jacoco/
+$ ll target/site/jacoco/
 -rw-r--r--   1 user group <size>  <time_stamp> index.html
 drwxr-xr-x  22 user group <size>  <time_stamp> jacoco-resources
 -rw-r--r--   1 user group <size>  <time_stamp> jacoco-sessions.html
