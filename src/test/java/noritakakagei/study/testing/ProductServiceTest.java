@@ -1,8 +1,8 @@
 package noritakakagei.study.testing;
 
-import static org.assertj.core.api.Assertions.*;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -41,16 +41,16 @@ class ProductService {
 }
 
 /* TEST CLASS */
-class ProductSearchTest {
-    private static ProductService svc;
+class ProductServiceTest {
+    private ProductService svc;
 
-    @BeforeAll
+    @BeforeEach
     void setUp() {
         svc = new ProductService();
     }
 
-    @AfterAll
-    void cleanUp() {
+    @AfterEach
+    void tearDown() {
         if (svc != null) {
             svc.close();
         }
@@ -58,14 +58,14 @@ class ProductSearchTest {
 
     @ParameterizedTest(name = "For example, existing product(s) when searching by word:{0}")
     @ValueSource(strings = {"laptop", "phone", "tablet"})
-    void testSearchReturnsResults(String keyword) {
+    void searchWithValidKeywordShouldReturnProductList(String keyword) {
         List<Product> results = svc.search(keyword);
         assertThat(results).isNotEmpty();
     }
 
     @ParameterizedTest(name = "For example, non existing product when searching by word:{0}")
     @EmptySource
-    void testSearchNoResultsForInvalidKeyword(String keyword) throws Exception {
+    void searchWithEmptyKeywordShouldReturnEmptyList(String keyword) {
         List<Product> results = svc.search(keyword);
         assertThat(results).isEmpty();
     }
