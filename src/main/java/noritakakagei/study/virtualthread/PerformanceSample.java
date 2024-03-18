@@ -15,82 +15,79 @@ public class PerformanceSample {
     
     // long run main thread
     public static void main(String... args) throws InterruptedException {
-        ExecutorService executor;
-        List<Thread> threads = new ArrayList<>();
-        long start;
-        long end;
+        // ExecutorService executor;
 
-        // PLATFORM THREAD - ThreadFactory PATTERN
-        System.out.println("Running platform threads by ThreadFactory...");
-        start = System.currentTimeMillis();
-
-        for(int i = 0; i < NUM_THREADS; i++) {
-            Thread thread = pfFactory.newThread(new SleepWorker("Platform Thread["+i+"]"));
-            threads.add(thread);
-            thread.start();
-        }
-
-        for(Thread thread : threads) {
-            thread.join();
-        }
-
-        end = System.currentTimeMillis();
-        long pfFactoryTime = end - start;
-        
-        // VIRTUAL THREAD - ThreadFactory PATTERN
-        System.out.println("Running virtual threads by ThreadFactory...");
-        start = System.currentTimeMillis();
-
-        for(int i = 0; i < NUM_THREADS; i++) {
-            Thread thread = vrtFactory.newThread(new SleepWorker("Virtual Thread["+i+"]"));
-            threads.add(thread);
-            thread.start();
-        }
-
-        for(Thread thread : threads) {
-            thread.join();
-        }
-
-        end = System.currentTimeMillis();
-        long vrtFactoryTime = end - start;
-
+        /* Pattern: ThreadFactory object */
         // PLATFORM THREAD
-        System.out.println("Running platform threads by ExecutorService...");
-        executor = Executors.newFixedThreadPool(8, pfFactory);
-        start = System.currentTimeMillis();
+        System.out.println("Running platform threads by using ThreadFactory...");
+        long timeOfPfFactory = getTimeOfRunningThreadsByFactory(pfFactory);
+        
+        // VIRTUAL THREAD
+        System.out.println("Running virtual threads by using ThreadFactory...");
+        long timeOfVrtFactory = getTimeOfRunningThreadsByFactory(vrtFactory);
 
+        // /* Pattern: ExecutorService object */
+        // // PLATFORM THREAD
+        // System.out.println("Running platform threads by using ExecutorService...");
+        // executor = Executors.newFixedThreadPool(8, pfFactory);
+        // long timeOfPfExecutor = getTimeOfRunningThreadsByExecutor(executor);
+
+        // // VIRTUAL THREAD
+        // System.out.println("Running virtual threads by using ExecutorService...");
+        // executor = Executors.newFixedThreadPool(8, vrtFactory);
+        // long timeOfVrtExecutor = getTimeOfRunningThreadsByExecutor(executor);
+
+        // Output results
+        System.out.println("Running Time:");
+        System.out.println("Platform Thread (ThreadFactory): " + timeOfPfFactory + "(ms)");
+        System.out.println("Virtual Thread (ThreadFactory): " + timeOfVrtFactory + "(ms)");
+        // System.out.println("Platform Thread (ExecutorService): " + timeOfPfExecutor + "(ms)");
+        // System.out.println("Virtual Thread (ExecutorService): " + timeOfVrtExecutor + "(ms)");
+    }
+
+    // return running time (milli seconds)
+    protected static long getTimeOfRunningThreadsByFactory(ThreadFactory factory) 
+        throws InterruptedException {
+
+        List<Thread> threads = new ArrayList<>();
+
+        long start = System.currentTimeMillis();
+
+        // create and running tasks on thread
         for(int i = 0; i < NUM_THREADS; i++) {
-            executor.submit(new SleepWorker("Platform Thread["+i+"]"));
+            Thread thread = factory.newThread(new SleepWorker("Thread["+i+"]"));
+            thread.start();
+            threads.add(thread);
         }
 
-        executor.shutdown();
-        executor.awaitTermination(1, TimeUnit.HOURS);
-
-        end = System.currentTimeMillis();
-        long pfTime = end - start;
-
-        // VIRTUAL THREAD - ExecutorService PATTERN
-        System.out.println("Running virtual threads by ExecutorService...");
-        start = System.currentTimeMillis();
-
-        executor = Executors.newFixedThreadPool(8, vrtFactory);
-
-        for(int i = 0; i < NUM_THREADS; i++) {
-            executor.submit(new SleepWorker("Virtual Thread["+i+"]"));
+        // wait tasks to finish
+        for(Thread thread : threads) {
+            thread.join();
         }
 
+        long end = System.currentTimeMillis();
+
+        return end - start;
+    }
+
+    // return running time (milli seconds)
+    protected static long getTimeOfRunningThreadsByExecutor(ExecutorService executor) 
+        throws InterruptedException {
+
+        long start = System.currentTimeMillis();
+
+        // create and running tasks on thread
+        for(int i=0; i<NUM_THREADS; i++) {
+            executor.submit(new SleepWorker("Thread["+i+"]"));
+        }
+
+        // wait tasks to finish
         executor.shutdown();
-        executor.awaitTermination(1, TimeUnit.HOURS);
+        executor.awaitTermination(1, TimeUnit.HOURS); // timeout 1h
 
-        end = System.currentTimeMillis();
-        long vrtTime = end - start;
+        long end = System.currentTimeMillis();
 
-        // RESULT OUTPUT
-        System.out.println("Result:");
-        System.out.println("Platform Thread (ThreadFactory): " + pfFactoryTime + "(ms)");
-        System.out.println("Virtual Thread (ThreadFactory): " + vrtFactoryTime + "(ms)");
-        System.out.println("Platform Thread (ExecutorService): " + pfTime + "(ms)");
-        System.out.println("Virtual Thread (ExecutorService): " + vrtTime + "(ms)");
+        return end - start;
     }
 }
 
@@ -105,11 +102,8 @@ class SleepWorker implements Runnable {
     public void run() {
         // something to do
         try {
-            // System.out.println(name+": sleepting");
             Thread.sleep(Duration.ofSeconds(5));
-            // System.out.println(name+": wake up");
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -119,7 +113,7 @@ class SleepWorker implements Runnable {
 // $ java -Xms4G -Xmx4G noritakakagei.study.virtualthread.PerformanceSample
 // 
 // Number of threads: 1,000,000
-// Executing time:
+// Executing time: create thread -> start thread -> wait thread -> done task and thread
 //  Platform Thread (ThreadFactory): 323377(ms)
 //  Virtual Thread (ThreadFactory): 13028(ms)
 //  Platform Thread: N/A(ms) -> timeout 1h
