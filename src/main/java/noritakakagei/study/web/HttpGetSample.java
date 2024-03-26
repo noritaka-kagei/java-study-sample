@@ -7,7 +7,7 @@ import java.net.http.HttpResponse;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class GetSample {
+public class HttpGetSample {
     public static void main(String[] args) throws URISyntaxException, IOException, InterruptedException {
         // HttpClientのインスタンスを作成
         HttpClient client = HttpClient.newHttpClient();
