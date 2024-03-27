@@ -4,10 +4,11 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.concurrent.CompletableFuture;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class HttpGetSample {
+public class HttpGetNonBlockingSample {
     public static void main(String[] args) 
             throws URISyntaxException, IOException, InterruptedException {
         
@@ -21,10 +22,13 @@ public class HttpGetSample {
         HttpClient client = HttpClient.newHttpClient();
 
         // リクエストを送信し、レスポンスを文字列として受け取る
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        CompletableFuture<HttpResponse<String>> responseFuture = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
 
-        // レスポンスのステータスコードとボディを出力
-        System.out.println("Response status code: " + response.statusCode());
-        System.out.println("Response body: " + response.body());
+        // レスポンスを受け取るまでの時間で何らかの処理を実行
+
+        // レスポンスのボディを出力
+        responseFuture.thenApply(HttpResponse::body)
+                      .thenAccept(System.out::println)
+                      .join();
     }
 }
